@@ -1,23 +1,18 @@
 {
   "ignore": [
-    ".git",
-    ".gitattributes",
-    ".githooks",
-    ".github",
+    "README.md",
     ".gitignore",
-    ".nvmrc",
-    "kit.json",
-    "node_modules",
-    "yarn.lock"
+    "box-img-lg.png",
+    "box-img-sm.png",
+    "images/",
+    "build/"
   ],
   "commands": {
-    "Run tests": "npm test",
-    "Compile contracts": "npm run compile",
-    "Migrate to development network": "npm run migrate:dev",
-    "Migrate to kovan network": "npm run migrate:kovan",
-    "IMPORTANT: Install dependencies": "npm install"
+    "Compile contracts": "truffle compile",
+    "Migrate contracts": "truffle migrate --network <<network>>",
+    "Test contracts": "truffle test --network <<network>>"
   },
   "hooks": {
-    "post-unpack": "bash unbox.sh && rm unbox.sh"
+    "post-unpack": "npm install"
   }
 }

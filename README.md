@@ -10,50 +10,71 @@
 
 ## Requirements
 
-- NPM
+There are a few technical requirements before we start. 
+To use `Truffle boxes`, you need to have installed in your computer:
+
+- Git
+- a POSIX compliant shell (use gitBash on Windows OS)
+- Node.js and NPM
+- a code editor
+
+**Truffle framework**
+
+Once you have those requirements installed, you only need one command to install `Truffle`.
+It is better to do it globally:
+
+```shell
+npm install -g truffle
+```
 
 ## Installation
 
-1. Install truffle
-
-```bash
-npm install truffle -g
-```
-
-2. Setup repo
+1. Setup repo
 
 ```bash
 mkdir MyChainlinkProject
 cd MyChainlinkProject/
 ```
 
-3. Unbox
+2. Unbox
+
+This also takes care of installing the necessary dependencies and it can take some time.
 
 ```bash
 truffle unbox smartcontractkit/box
 ```
 
-4. Install dependencies by running:
+## Requirements to deploy on a network
 
-```bash
-npm install
+Before you deploy on a network, you need:
 
-# OR...
+- A wallet with enought ETH to deploy
+- An account at [infura](https://infura.io/)
 
-yarn install
-```
+1. Create a wallet
 
-## Test
+The easy way to setup an account is using a web3 wallet injected in the browser
+- [Metamask](https://metamask.io/)
 
-```bash
-npm test
-```
+Copy your mnemonic (seed phrase or backup words)
 
-## Deploy
+2. Create an account at [infura](https://infura.io/)
+   - Create a project, selecting `Ethereum network`.
+   - Copy the project ID
 
-> :warning: When pushing your code to Github, make sure that your **MNEMONIC** and **RPC_URL** are stored in a **.env** file and it is also in your **.gitignore**
+### Create .env
 
-For deploying to the kovan network, Truffle will use `truffle-hdwallet-provider` for your mnemonic and an RPC URL. Set your environment variables `$RPC_URL` and `$MNEMONIC` before running:
+For deploying to the kovan network, Truffle will use `truffle-hdwallet-provider` for your mnemonic and an RPC URL, which uses your infura key.
+
+Make a copy of `.env.example` and named `.env`, located in the folder project.
+
+Update your **MNEMONIC** and **RPC_URL** in **.env**
+
+Save `.env` file.
+
+> :warning: when pushing your code to Github, make sure that your **MNEMONIC** and **INFURA_KEY** are stored in a **.env** file and it is also in your **.gitignore**
+
+## Deploy on Kovan - Ethereum testnet network
 
 ```bash
 npm run migrate:kovan
@@ -66,30 +87,28 @@ truffle migrate --network kovan --reset
 ```
 If you want to use truffle commands.
 
-### Local Blockchain
-
-> :warning: Without a Chainlink node deployed locally, requests from smart contracts will not be responded to. We recommend you deploy to the Kovan network
-
-If needed, edit the `truffle-config.js` config file to set the desired network to a different port. It assumes any network is running the RPC port on 8545.
+## Test on Kovan
 
 ```bash
-npm run migrate:dev
+npm run test:kovan
 ```
 
-## Helper Scripts
-
-There are 3 helper scripts provided with this box in the scripts directory:
-
-- `fund-contract.js`
-- `request-data.js`
-- `read-contract.js`
-
-In addition, for working with Chainlink Price Feeds and ChainlinkVRF there are folders respectively. 
-
-They can be used by calling them from `npx truffle exec`, for example:
+Or using truffle commands:
 
 ```bash
-npx truffle exec scripts/fund-contract.js --network kovan
+truffle test --network kovan
+```
+
+## Helper Script
+
+There are a helper script provided with this box in the scripts directory:
+
+- `get-latest-price.js`
+
+It can be used by calling them from `npx truffle exec`, for example:
+
+```bash
+npx truffle exec scripts/get-latest-price.js --network kovan
 ```
 
 The CLI will output something similar to the following:
@@ -97,48 +116,9 @@ The CLI will output something similar to the following:
 ```
 Using network 'kovan'.
 
-Funding contract: 0x972DB80842Fdaf6015d80954949dBE0A1700705E
-0xd81fcf7bfaf8660149041c823e843f0b2409137a1809a0319d26db9ceaeef650
-Truffle v5.0.25 (core: 5.0.25)
-Node v10.16.3
+205136000000
+Truffle v5.5.13 (core: 5.5.13)
+Node v16.13.1
 ```
 
-In the `request-data.js` script, example parameters are provided for you. You can change the oracle address, Job ID, and parameters based on the information available on [our documentation](https://docs.chain.link/docs/decentralized-oracles-ethereum-mainnet/#testnets).
-
-```bash
-npx truffle exec scripts/request-data.js --network kovan
-```
-
-This creates a request and will return the transaction ID, for example:
-
-```
-Using network 'kovan'.
-
-Creating request on contract: 0x972DB80842Fdaf6015d80954949dBE0A1700705E
-0x828f256109f22087b0804a4d1a5c25e8ce9e5ac4bbc777b5715f5f9e5b181a4b
-Truffle v5.0.25 (core: 5.0.25)
-Node v10.16.3
-```
-
-After creating a request on a kovan network, you will want to wait 3 blocks for the Chainlink node to respond. Then call the `read-contract.js` script to read the contract's state.
-
-```bash
-npx truffle exec scripts/read-contract.js --network kovan
-```
-
-Once the oracle has responded, you will receive a value similar to the one below:
-
-```
-Using network 'kovan'.
-
-21568
-Truffle v5.0.25 (core: 5.0.25)
-Node v10.16.3
-```
-
-## TODO
-
-- Add tests for ChainlinkVRF
-- Add tests for Chainlink Price Feeds
-- Refactor tests to use this instead of defining contracts with let
-- Use the Chainlink-published mocks for [MockV3Aggregator](https://github.com/smartcontractkit/chainlink/blob/develop/evm-contracts/src/v0.6/tests/MockV3Aggregator.sol) and [VRFCoordinatorMock](https://github.com/smartcontractkit/chainlink/blob/develop/evm-contracts/src/v0.6/tests/VRFCoordinatorMock.sol)
+> You must deploy the project before use the script.
