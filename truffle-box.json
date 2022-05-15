@@ -9,8 +9,8 @@
   ],
   "commands": {
     "Compile contracts": "truffle compile",
-    "Migrate contracts": "truffle migrate --network <<network>>",
-    "Test contracts": "truffle test --network <<network>>"
+    "Migrate contracts": "truffle migrate --network kovan",
+    "Test contracts": "truffle test --network kovan"
   },
   "hooks": {
     "post-unpack": "npm install"
