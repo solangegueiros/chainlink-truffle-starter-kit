@@ -13,6 +13,6 @@
     "Test contracts": "truffle test --network kovan"
   },
   "hooks": {
-    "post-unpack": "npm install"
+    "post-unpack": "npm install --silent"
   }
 }
